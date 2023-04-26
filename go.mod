@@ -1,4 +1,4 @@
-module ch13
+module github.com/learning-go-book-2e/ch13
 
 go 1.20
 
