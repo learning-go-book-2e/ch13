@@ -2,8 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/go-chi/chi/v5"
-	"golang.org/x/exp/slog"
+	"log/slog"
 	"net/http"
 	"os"
 	"strings"
@@ -27,8 +28,8 @@ The JSON should be structured as:
 	}
 */
 func main() {
-	options := slog.HandlerOptions{}
-	handler := options.NewJSONHandler(os.Stderr)
+	options := &slog.HandlerOptions{}
+	handler := slog.NewJSONHandler(os.Stderr, options)
 	mySlog := slog.New(handler)
 	r := createChiRouter(mySlog)
 	s := http.Server{
@@ -40,7 +41,7 @@ func main() {
 	}
 	err := s.ListenAndServe()
 	if err != nil {
-		if err != http.ErrServerClosed {
+		if !errors.Is(err, http.ErrServerClosed) {
 			panic(err)
 		}
 	}

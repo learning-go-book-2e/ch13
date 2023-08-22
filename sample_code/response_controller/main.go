@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"golang.org/x/exp/slog"
+	"log/slog"
 	"net/http"
 	"time"
 )
@@ -40,7 +40,7 @@ func main() {
 	}
 	err := s.ListenAndServe()
 	if err != nil {
-		if err != http.ErrServerClosed {
+		if !errors.Is(err, http.ErrServerClosed) {
 			panic(err)
 		}
 	}

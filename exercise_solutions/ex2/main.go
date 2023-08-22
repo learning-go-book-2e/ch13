@@ -1,8 +1,9 @@
 package main
 
 import (
+	"errors"
 	"github.com/go-chi/chi/v5"
-	"golang.org/x/exp/slog"
+	"log/slog"
 	"net/http"
 	"os"
 	"strings"
@@ -14,8 +15,8 @@ Write a small middleware component that uses structured logging to log the
 IP address of each incoming request to your web server.
 */
 func main() {
-	options := slog.HandlerOptions{}
-	handler := options.NewJSONHandler(os.Stderr)
+	options := &slog.HandlerOptions{}
+	handler := slog.NewJSONHandler(os.Stderr, options)
 	mySlog := slog.New(handler)
 	r := createChiRouter(mySlog)
 	s := http.Server{
@@ -27,7 +28,7 @@ func main() {
 	}
 	err := s.ListenAndServe()
 	if err != nil {
-		if err != http.ErrServerClosed {
+		if !errors.Is(err, http.ErrServerClosed) {
 			panic(err)
 		}
 	}

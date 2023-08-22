@@ -3,8 +3,8 @@ package main
 import (
 	"compress/gzip"
 	"fmt"
-	"golang.org/x/exp/slog"
 	"io"
+	"log/slog"
 	"os"
 	"strings"
 )

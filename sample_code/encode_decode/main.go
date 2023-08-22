@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"strings"
 )
 
@@ -20,9 +22,12 @@ func main() {
 	dec := json.NewDecoder(strings.NewReader(data))
 	var b bytes.Buffer
 	enc := json.NewEncoder(&b)
-	for dec.More() {
+	for {
 		err := dec.Decode(&t)
 		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
 			panic(err)
 		}
 		fmt.Println(t)
