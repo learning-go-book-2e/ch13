@@ -46,6 +46,7 @@ func buildGZipReader(fileName string) (*gzip.Reader, func(), error) {
 	}
 	gr, err := gzip.NewReader(r)
 	if err != nil {
+		r.Close() // Close the file descriptor if gzip.NewReader fails
 		return nil, nil, err
 	}
 	return gr, func() {
